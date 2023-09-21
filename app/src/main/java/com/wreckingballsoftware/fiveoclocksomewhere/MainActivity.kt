@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     topBar = {
                         TopBar(
-                            title = stringResource(id = R.string.app_title)
+                            title = stringResource(id = R.string.app_name)
                         )
                     }
                 ) {

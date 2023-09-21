@@ -3,10 +3,9 @@ package com.wreckingballsoftware.fiveoclocksomewhere.database
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "cocktails")
-data class DBCocktails(
+@Entity(tableName = "time_zones")
+class DBTimeZones(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val name: String,
-    val url: String,
+    val zone: String,
 )

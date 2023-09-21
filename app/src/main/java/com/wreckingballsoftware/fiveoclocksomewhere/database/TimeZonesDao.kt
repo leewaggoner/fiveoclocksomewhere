@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Query
 
 @Dao
-interface CocktailsDao {
-    @Query("SELECT * FROM cocktails")
-    fun getAllCocktails(): List<DBCocktails>
+interface TimeZonesDao {
+    @Query("SELECT * FROM time_zones")
+    fun getAllTimeZones(): List<DBTimeZones>
 }

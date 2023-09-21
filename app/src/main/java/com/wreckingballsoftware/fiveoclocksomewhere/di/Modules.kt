@@ -11,13 +11,31 @@ const val DB_NAME = "fiveoclocksomewhere"
 val appModule = module {
     single {
         CocktailsRepo(
-            cocktailsDao = get()
+            cocktailsDao = get(),
+            timeZonesDao = get(),
+            countriesDao = get(),
+            regionalCocktailsDao = get(),
         )
     }
 
     single {
         val database = get<ItsFiveOClockSomewhereDb>()
+        database.getCountriesDao()
+    }
+
+    single {
+        val database = get<ItsFiveOClockSomewhereDb>()
+        database.getTimeZonesDao()
+    }
+
+    single {
+        val database = get<ItsFiveOClockSomewhereDb>()
         database.getCocktailsDao()
+    }
+
+    single {
+        val database = get<ItsFiveOClockSomewhereDb>()
+        database.getRegionalCocktailsDao()
     }
 
     single {
@@ -27,6 +45,7 @@ val appModule = module {
             name = DB_NAME,
         )
             .createFromAsset("databases/$DB_NAME.db")
+            .fallbackToDestructiveMigration()
             .build()
     }
 }

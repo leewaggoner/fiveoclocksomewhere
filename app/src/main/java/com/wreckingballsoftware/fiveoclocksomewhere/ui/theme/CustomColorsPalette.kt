@@ -7,9 +7,9 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 data class CustomColorsPalette(
-    val extraColor1: Color = Color.Unspecified,
-    val extraColor2: Color = Color.Unspecified,
-    val extraColor3: Color = Color.Unspecified,
+    val primary: Color = Color.Unspecified,
+    val secondary: Color = Color.Unspecified,
+    val tertiary: Color = Color.Unspecified,
 )
 
 val LightCustomColorsPalette = CustomColorsPalette(
