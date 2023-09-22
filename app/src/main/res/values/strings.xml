@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Five O\'Clock Somewhere</string>
+    <string name="no_excuse">You don\'t need an excuse.</string>
+    <string name="five_oclock">IT\'S FIVE O\'CLOCK SOMEWHERE!</string>
+    <string name="find_out">Find out where.</string>
+    <string name="go">Go</string>
 </resources>

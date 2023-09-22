@@ -66,7 +66,8 @@ fun FiveOClockSomewhereTheme(
     val customColorsPalette = if (darkTheme) DarkCustomColorsPalette else LightCustomColorsPalette
 
     CompositionLocalProvider(
-        LocalCustomColorsPalette provides customColorsPalette
+        LocalCustomColorsPalette provides customColorsPalette,
+        LocalCustomTypography provides FiveCustomTypography,
     ) {
         MaterialTheme(
             colorScheme = colorScheme,
