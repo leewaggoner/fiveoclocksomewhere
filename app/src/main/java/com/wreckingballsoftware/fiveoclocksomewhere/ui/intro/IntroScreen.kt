@@ -55,18 +55,18 @@ fun IntroScreenContent(
             modifier = Modifier
                 .padding(bottom = MaterialTheme.dimensions.IntroSpace),
             text = stringResource(id = R.string.no_excuse),
-            style = MaterialTheme.customTypography.introSetup,
+            style = MaterialTheme.customTypography.fiveSubtitle,
         )
         Text(
             text = stringResource(id = R.string.five_oclock),
-            style = MaterialTheme.customTypography.introTitle,
+            style = MaterialTheme.customTypography.fiveTitle,
         )
         Spacer(modifier = Modifier.height(height = MaterialTheme.dimensions.IntroSpaceBig))
         Text(
             modifier = Modifier
                 .padding(bottom = MaterialTheme.dimensions.IntroSpace),
             text = stringResource(id = R.string.find_out),
-            style = MaterialTheme.customTypography.introCta,
+            style = MaterialTheme.customTypography.fiveBody,
         )
         FiveButton(
             text = stringResource(id = R.string.go),
@@ -75,7 +75,11 @@ fun IntroScreenContent(
     }
 }
 
-@Preview
+@Preview(name = "Default Font Size", fontScale = 1f)
+@Preview(name = "Large Font Size", fontScale = 2f)
+annotation class FontScalePreviews
+
+@FontScalePreviews
 @Composable
 fun IntroScreenContentPreview() {
     IntroScreenContent(

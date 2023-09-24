@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="toasts">
+        <item>Cheers!</item>
+        <item>Ganbei!</item>
+        <item>Bottoms up!</item>
+        <item>Prost!</item>
+        <item>Kampai!</item>
+        <item>į Sveikatą</item>
+        <item>¡Salud!</item>
+        <item>Skål!</item>
+        <item>Sláinte!</item>
+        <item>Damn the torpedoes!</item>
+        <item>The liver is evil and must be punished!</item>
+        <item>Friends forever!</item>
+        <item>To absent friends!</item>
+        <item>Tomorrow is the enemy!</item>
+        <item>May we never regret this!</item>
+        <item>No road is long with good company!</item>
+        <item>While we live, let’s live!</item>
+        <item>Here’s mud in your eye!</item>
+        <item>To interesting times!</item>
+        <item>If you have an appetite for life, stay hungry!</item>
+        <item>What shall we drink to? Four in the morning!</item>
+        <item>Bottoms up!</item>
+        <item>Skål!</item>
+    </string-array>
+</resources>

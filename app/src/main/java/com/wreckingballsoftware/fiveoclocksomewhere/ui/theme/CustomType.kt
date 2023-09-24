@@ -12,21 +12,21 @@ import androidx.compose.ui.unit.sp
 
 
 data class CustomTypeStyles(
-    val introSetup: TextStyle = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 24.sp,
-        lineHeight = 28.sp,
-        textAlign = TextAlign.Center,
-    ),
-    val introTitle: TextStyle = TextStyle(
+    val fiveTitle: TextStyle = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Bold,
         fontSize = 32.sp,
         lineHeight = 40.sp,
         textAlign = TextAlign.Center,
     ),
-    val introCta: TextStyle = TextStyle(
+    val fiveSubtitle: TextStyle = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 24.sp,
+        lineHeight = 28.sp,
+        textAlign = TextAlign.Center,
+    ),
+    val fiveBody: TextStyle = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
         fontSize = 20.sp,

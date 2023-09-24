@@ -4,4 +4,11 @@
     <string name="five_oclock">IT\'S FIVE O\'CLOCK SOMEWHERE!</string>
     <string name="find_out">Find out where.</string>
     <string name="go">Go</string>
+    <string name="its_five_oclock">It\'s five o\'clock %1$s. Would you like %2$s?</string>
+    <string name="image">Drink image.</string>
+    <string name="get_recipe">Get Recipe</string>
+    <string name="something_else">Something Else</string>
+    <string name="image_error">Error loading image.</string>
+    <string name="country_error">nowhere. It\'s not five o\'clock anywhere in the world</string>
+    <string name="water">a glass of water</string>
 </resources>

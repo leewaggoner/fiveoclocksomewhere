@@ -3,6 +3,8 @@ package com.wreckingballsoftware.fiveoclocksomewhere.di
 import androidx.room.Room
 import com.wreckingballsoftware.fiveoclocksomewhere.database.ItsFiveOClockSomewhereDb
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.CocktailsRepo
+import com.wreckingballsoftware.fiveoclocksomewhere.repos.CountriesRepo
+import com.wreckingballsoftware.fiveoclocksomewhere.repos.TimeZonesRepo
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.intro.IntroViewModel
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.mainscreen.MainViewModel
 import org.koin.android.ext.koin.androidContext
@@ -19,15 +21,28 @@ val appModule = module {
     viewModel {
         MainViewModel(
             handle = get(),
+            countriesRepo = get(),
             cocktailsRepo = get(),
         )
     }
 
     single {
-        CocktailsRepo(
-            cocktailsDao = get(),
+        TimeZonesRepo(
             timeZonesDao = get(),
+        )
+    }
+
+    single {
+        CountriesRepo(
+            timeZonesRepo = get(),
             countriesDao = get(),
+        )
+    }
+
+    single {
+        CocktailsRepo(
+            timeZonesRepo = get(),
+            cocktailsDao = get(),
             regionalCocktailsDao = get(),
         )
     }

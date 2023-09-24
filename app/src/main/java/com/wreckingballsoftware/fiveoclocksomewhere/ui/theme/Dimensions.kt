@@ -8,8 +8,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 data class Dimensions(
+    val ButtonWidth: Dp = 160.dp,
     val IntroSpace: Dp = 8.dp,
     val IntroSpaceBig: Dp = 32.dp,
+    val MainImageSize: Dp = 160.dp,
+    val MainSpaceBig: Dp = 32.dp,
+    val MainSmallSpace: Dp = 8.dp,
 )
 
 val LocalDimensions = staticCompositionLocalOf { Dimensions() }
