@@ -10,18 +10,21 @@ data class CustomColorsPalette(
     val primary: Color = Color.Unspecified,
     val secondary: Color = Color.Unspecified,
     val tertiary: Color = Color.Unspecified,
+    val background: Color = Color.Unspecified
 )
 
 val LightCustomColorsPalette = CustomColorsPalette(
-    AppGreen,
-    AppBrown,
-    AppRed,
+    primary = AppGreen,
+    secondary = AppBrown,
+    tertiary = AppRed,
+    background = AppBackgroundLight,
 )
 
 val DarkCustomColorsPalette = CustomColorsPalette(
-    AppGreen,
-    AppBrown,
-    AppRed,
+    primary = AppGreen,
+    secondary = AppBrown,
+    tertiary = AppRed,
+    background = AppBackgroundDark,
 )
 
 val LocalCustomColorsPalette = staticCompositionLocalOf { CustomColorsPalette() }

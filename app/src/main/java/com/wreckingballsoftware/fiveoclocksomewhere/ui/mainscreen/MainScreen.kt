@@ -8,9 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.Actions
+import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun MainScreen(actions: Actions) {
+fun MainScreen(
+    actions: Actions,
+    viewModel: MainViewModel = getViewModel()
+) {
     Column(
         modifier = Modifier
             .fillMaxSize(),
