@@ -1,5 +1,6 @@
 package com.wreckingballsoftware.fiveoclocksomewhere.database
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -8,5 +9,6 @@ data class DBCocktails(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val name: String,
-    val url: String,
+    @ColumnInfo("search_string")
+    val searchString: String,
 )

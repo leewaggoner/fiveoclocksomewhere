@@ -6,5 +6,7 @@ data class MainScreenState(
     val placeErrorId: Int? = null,
     val cocktailName: String = "",
     val cocktailErrorId: Int? = null,
+    val cocktailError: String? = null,
     val imageUrl: String = "",
+    val isLoading: Boolean = false,
 )

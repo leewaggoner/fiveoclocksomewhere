@@ -11,4 +11,7 @@
     <string name="image_error">Error loading image.</string>
     <string name="country_error">nowhere. It\'s not five o\'clock anywhere in the world</string>
     <string name="water">a glass of water</string>
+    <string name="error">Unknown error.</string>
+    <string name="ok">Ok</string>
+    <string name="unknown_network_error">Unknown network error.</string>
 </resources>

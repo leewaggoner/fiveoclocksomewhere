@@ -7,16 +7,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wreckingballsoftware.fiveoclocksomewhere.R
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.Actions
+import com.wreckingballsoftware.fiveoclocksomewhere.ui.compose.FiveErrorAlert
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.compose.FiveImage
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.mainscreen.models.MainScreenState
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.theme.dimensions
@@ -36,6 +39,7 @@ fun MainScreen(
         state = viewModel.state,
         getRecipe = viewModel::getRecipe,
         somethingElse = viewModel::somethingElse,
+        onDismissAlert = viewModel::onDismissAlert,
     )
 }
 
@@ -44,6 +48,7 @@ fun MainScreenContent(
     state: MainScreenState,
     getRecipe: () -> Unit,
     somethingElse: () -> Unit,
+    onDismissAlert: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -60,6 +65,21 @@ fun MainScreenContent(
             getRecipe = getRecipe,
             somethingElse = somethingElse
         )
+
+        if(state.isLoading) {
+            CircularProgressIndicator()
+        }
+
+        if (state.cocktailErrorId != null || state.cocktailError != null) {
+            FiveErrorAlert(
+                message = if (state.cocktailErrorId == null) {
+                    state.cocktailError ?: ""
+                } else {
+                    stringResource(id = state.cocktailErrorId)
+                },
+                onDismissAlert = onDismissAlert
+            )
+        }
     }
 }
 
@@ -78,5 +98,6 @@ fun MainScreenContentPreview() {
         ),
         getRecipe = { },
         somethingElse = { },
+        onDismissAlert = { }
     )
 }

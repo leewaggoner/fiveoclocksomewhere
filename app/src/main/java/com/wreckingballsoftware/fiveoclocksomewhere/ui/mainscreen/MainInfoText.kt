@@ -20,11 +20,6 @@ fun MainInfoText(state: MainScreenState) {
     } else {
         stringResource(id = state.placeErrorId)
     }
-    val cocktail = if (state.cocktailErrorId == null) {
-        state.cocktailName
-    } else {
-        stringResource(id = state.cocktailErrorId)
-    }
     Text(
         text = state.toast,
         style = MaterialTheme.customTypography.fiveTitle
@@ -34,7 +29,7 @@ fun MainInfoText(state: MainScreenState) {
         text = stringResource(
             id = R.string.its_five_oclock,
             place,
-            cocktail,
+            state.cocktailName,
         ),
         style = MaterialTheme.customTypography.fiveSubtitle
     )
@@ -46,7 +41,7 @@ fun MainInfoTextPreview() {
     MainInfoText(
         state = MainScreenState(
             placeErrorId = R.string.country_error,
-            cocktailErrorId = R.string.water
+            cocktailName = "something good"
         )
     )
 }
