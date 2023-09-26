@@ -2,6 +2,7 @@ package com.wreckingballsoftware.fiveoclocksomewhere.repos.models
 
 class UICocktail(
     val error: String? = null,
+    val id: Long? = null,
     val name: String? = null,
     val displayName: String? = null,
     val glass: String? = null,

@@ -13,4 +13,9 @@ interface CocktailDBService {
 
     @GET("json/v1/${BuildConfig.COCKTAILDB_AUTH_KEY}/random.php")
     suspend fun getRandomCocktail(): ApiCocktails
+
+    @GET("json/v1/${BuildConfig.COCKTAILDB_AUTH_KEY}/lookup.php")
+    suspend fun getCocktailById(
+        @Query("i") cocktailId: String
+    ): ApiCocktails
 }

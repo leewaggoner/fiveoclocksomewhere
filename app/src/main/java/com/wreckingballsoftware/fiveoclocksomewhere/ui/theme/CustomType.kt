@@ -33,6 +33,13 @@ data class CustomTypeStyles(
         lineHeight = 24.sp,
         textAlign = TextAlign.Center,
     ),
+    val fiveInstructions: TextStyle = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 20.sp,
+        textAlign = TextAlign.Center,
+    )
 )
 
 val FiveCustomTypography = CustomTypeStyles()

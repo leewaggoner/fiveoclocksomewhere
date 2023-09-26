@@ -14,4 +14,7 @@
     <string name="error">Unknown error.</string>
     <string name="ok">Ok</string>
     <string name="unknown_network_error">Unknown network error.</string>
+    <string name="how_to">How to make %1$s.</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="instructions">Instructions</string>
 </resources>

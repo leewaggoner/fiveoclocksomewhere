@@ -9,6 +9,7 @@ import com.wreckingballsoftware.fiveoclocksomewhere.network.models.ApiCocktails
 import com.wreckingballsoftware.fiveoclocksomewhere.network.models.NetworkResponse
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.models.Response
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.models.UICocktail
+import com.wreckingballsoftware.fiveoclocksomewhere.utils.determineArticle
 import com.wreckingballsoftware.fiveoclocksomewhere.utils.rand
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -25,8 +26,11 @@ class CocktailsRepo(
         cocktailsDao.getAllCocktails()
     }
 
-    suspend fun getRandomCocktail(): Response<UICocktail> = withContext(Dispatchers.IO) {
-        when (val cocktails = callCocktailApiForRandomDrink()) {
+    suspend fun getCocktailById(cocktailId: Long): Response<UICocktail> = withContext(Dispatchers.IO) {
+        val cocktails = callCocktailApi {
+            cocktailDBService.getCocktailById(cocktailId.toString())
+        }
+        when (cocktails) {
             is NetworkResponse.Success -> {
                 val data = cocktails.mapToUICocktail()
                 if (data.error != null) {
@@ -43,10 +47,33 @@ class CocktailsRepo(
         }
     }
 
-    private suspend fun callCocktailApiForRandomDrink(): NetworkResponse<ApiCocktails> =
+    suspend fun getRandomCocktail(): Response<UICocktail> = withContext(Dispatchers.IO) {
+        val cocktails = callCocktailApi {
+            cocktailDBService.getRandomCocktail()
+        }
+        when (cocktails) {
+            is NetworkResponse.Success -> {
+                val data = cocktails.mapToUICocktail()
+                if (data.error != null) {
+                    Response.Error(errorMessageId = R.string.unknown_network_error)
+                } else {
+                    Response.Success(data = data)
+                }
+            }
+            is NetworkResponse.Error -> {
+                Response.Error(
+                    errorMessage = "Error code: ${cocktails.code} ${cocktails.exception}"
+                )
+            }
+        }
+    }
+
+    private suspend fun callCocktailApi(
+        callForCocktail: (suspend () -> ApiCocktails)
+    ): NetworkResponse<ApiCocktails> =
         withContext(Dispatchers.IO) {
             try {
-                NetworkResponse.Success(cocktailDBService.getRandomCocktail())
+                NetworkResponse.Success(callForCocktail())
             } catch (ex: HttpException) {
                 ex.toNetworkErrorResponse()
             } catch (ex: Exception) {
@@ -83,9 +110,8 @@ class CocktailsRepo(
         }
     }
 
-    private suspend fun callCocktailApiForDrink(
-        cocktail: String
-    ): NetworkResponse<ApiCocktails> = withContext(Dispatchers.IO) {
+    private suspend fun callCocktailApiForDrink(cocktail: String): NetworkResponse<ApiCocktails> =
+        withContext(Dispatchers.IO) {
         try {
             NetworkResponse.Success(cocktailDBService.getCocktail(cocktail))
         } catch (ex: HttpException) {
@@ -118,6 +144,7 @@ private fun NetworkResponse<ApiCocktails>.mapToUICocktail(displayName: String? =
             if (!data.drinks.isNullOrEmpty()) {
                 val drink = data.drinks[0]
                 UICocktail(
+                    id = drink.id,
                     name = drink.name,
                     displayName = displayName ?: "${determineArticle(drink.name)} ${drink.name}",
                     glass = drink.glass,
@@ -136,15 +163,4 @@ private fun NetworkResponse<ApiCocktails>.mapToUICocktail(displayName: String? =
         }
     }
 
-fun determineArticle(cocktail: String): String {
-    val vowels = setOf('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U')
-
-    //check if the cocktail starts with a non-alphabetic character
-    if (!cocktail[0].isLetter()) {
-        return "a"
-    }
-
-    //check if the first character of the word is a vowel
-    return if (cocktail[0] in vowels) "an" else "a"
-}
 

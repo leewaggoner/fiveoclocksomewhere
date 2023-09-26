@@ -17,10 +17,12 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.wreckingballsoftware.fiveoclocksomewhere.Actions
 import com.wreckingballsoftware.fiveoclocksomewhere.R
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.compose.FiveErrorAlert
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.compose.FiveImage
+import com.wreckingballsoftware.fiveoclocksomewhere.ui.mainscreen.models.MainScreenNavigation
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.mainscreen.models.MainScreenState
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.theme.dimensions
 import org.koin.androidx.compose.getViewModel
@@ -30,6 +32,15 @@ fun MainScreen(
     actions: Actions,
     viewModel: MainViewModel = getViewModel()
 ) {
+    val navigation = viewModel.navigation.collectAsStateWithLifecycle(null)
+    navigation.value?.let { nav ->
+        when (nav) {
+            is MainScreenNavigation.DisplayCocktail -> {
+                actions.navigateToDisplayCocktail(nav.cocktailId)
+            }
+        }
+    }
+
     val toasts = stringArrayResource(id = R.array.toasts)
     LaunchedEffect(key1 = Unit) {
         viewModel.createToastList(toasts)

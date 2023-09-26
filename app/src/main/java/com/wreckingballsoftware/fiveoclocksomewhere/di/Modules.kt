@@ -7,6 +7,7 @@ import com.wreckingballsoftware.fiveoclocksomewhere.network.CocktailDBService
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.CocktailsRepo
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.CountriesRepo
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.TimeZonesRepo
+import com.wreckingballsoftware.fiveoclocksomewhere.ui.displaycocktail.DisplayCocktailViewModel
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.intro.IntroViewModel
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.mainscreen.MainViewModel
 import okhttp3.Interceptor
@@ -33,6 +34,13 @@ val appModule = module {
         MainViewModel(
             handle = get(),
             countriesRepo = get(),
+            cocktailsRepo = get(),
+        )
+    }
+
+    viewModel {
+        DisplayCocktailViewModel(
+            handle = get(),
             cocktailsRepo = get(),
         )
     }

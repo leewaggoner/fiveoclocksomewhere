@@ -14,7 +14,7 @@ class Actions(navController: NavController) {
             Destinations.MainScreen
         )
     }
-    val navigateToDisplayCocktail: (Int) -> Unit = { cocktailId ->
+    val navigateToDisplayCocktail: (Long) -> Unit = { cocktailId ->
         navController.navigate(
             Destinations.DisplayCocktail.replace(
                 oldValue = "{cocktailId}",

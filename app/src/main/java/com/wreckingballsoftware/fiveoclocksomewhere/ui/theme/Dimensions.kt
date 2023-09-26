@@ -14,6 +14,8 @@ data class Dimensions(
     val MainImageSize: Dp = 160.dp,
     val MainSpaceBig: Dp = 32.dp,
     val MainSmallSpace: Dp = 8.dp,
+    val DisplayBigSpace: Dp = 32.dp,
+    val DisplaySmallSpace: Dp = 8.dp,
 )
 
 val LocalDimensions = staticCompositionLocalOf { Dimensions() }
