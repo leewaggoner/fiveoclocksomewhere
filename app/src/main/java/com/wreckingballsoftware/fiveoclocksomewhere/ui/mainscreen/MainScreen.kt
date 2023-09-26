@@ -17,8 +17,8 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.wreckingballsoftware.fiveoclocksomewhere.Actions
 import com.wreckingballsoftware.fiveoclocksomewhere.R
-import com.wreckingballsoftware.fiveoclocksomewhere.ui.Actions
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.compose.FiveErrorAlert
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.compose.FiveImage
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.mainscreen.models.MainScreenState
@@ -32,7 +32,7 @@ fun MainScreen(
 ) {
     val toasts = stringArrayResource(id = R.array.toasts)
     LaunchedEffect(key1 = Unit) {
-        viewModel.chooseNewToast(toasts)
+        viewModel.createToastList(toasts)
     }
 
     MainScreenContent(

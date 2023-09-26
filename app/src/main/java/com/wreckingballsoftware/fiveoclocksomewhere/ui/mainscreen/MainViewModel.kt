@@ -25,22 +25,33 @@ class MainViewModel(
     var state by handle.saveable {
         mutableStateOf(MainScreenState())
     }
+    private var toasts: List<String> = listOf()
     private var currentCocktail: UICocktail? = null
 
     init {
-        //calculate where it's five o'clock
+        fetchCocktailData {
+            fetchCocktail()
+        }
+    }
+
+    private fun fetchCocktailData(cocktailCall: (suspend () -> MainScreenState)) {
         viewModelScope.launch(Dispatchers.Main) {
+            state = state.copy(isLoading = true)
             state = when (val place = countriesRepo.getPlaceWhereIts5OClock()) {
                 is Response.Success -> state.copy(placeName = place.data ?: "")
                 is Response.Error -> state.copy(placeErrorId = place.messageId)
                 else -> state
             }
-            state = state.copy(isLoading = true)
-            state = updateCocktail()
+            state = cocktailCall()
         }
     }
 
-    fun chooseNewToast(toasts: Array<String>) {
+    fun createToastList(resourceToasts: Array<String>) {
+        toasts = resourceToasts.toList()
+        newToast()
+    }
+
+    private fun newToast() {
         state = state.copy(toast = toasts[(0 .. toasts.size).rand()])
     }
 
@@ -49,15 +60,29 @@ class MainViewModel(
     }
 
     fun somethingElse() {
-
+        //fetch a random cocktail
+        fetchCocktailData {
+            newToast()
+            fetchNewCocktail()
+        }
     }
 
     fun onDismissAlert() {
         state = state.copy(cocktailErrorId = null, cocktailError = null)
     }
 
-    private suspend fun updateCocktail(): MainScreenState {
-        return when (val cocktail = cocktailsRepo.getCocktailFromWhereIts5OClock()) {
+    private suspend fun fetchCocktail(): MainScreenState {
+        val cocktail = cocktailsRepo.getCocktailFromWhereIts5OClock()
+        return handleCocktailResponse(cocktail)
+    }
+
+    private suspend fun fetchNewCocktail(): MainScreenState {
+        val cocktail = cocktailsRepo.getRandomCocktail()
+        return handleCocktailResponse(cocktail)
+    }
+
+    private fun handleCocktailResponse(cocktail: Response<UICocktail>): MainScreenState {
+        return when (cocktail) {
             is Response.Success -> {
                 val drink = cocktail.data
                 if (drink != null) {

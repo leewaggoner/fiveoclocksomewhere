@@ -13,7 +13,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.wreckingballsoftware.fiveoclocksomewhere.ui.FiveHost
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.compose.TopBar
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.theme.FiveOClockSomewhereTheme
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.theme.customColorsPalette

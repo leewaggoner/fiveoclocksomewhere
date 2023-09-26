@@ -1,4 +1,4 @@
-package com.wreckingballsoftware.fiveoclocksomewhere.ui
+package com.wreckingballsoftware.fiveoclocksomewhere
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

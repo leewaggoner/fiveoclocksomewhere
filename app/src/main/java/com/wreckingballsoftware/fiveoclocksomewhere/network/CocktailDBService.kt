@@ -9,5 +9,8 @@ interface CocktailDBService {
     @GET("json/v1/${BuildConfig.COCKTAILDB_AUTH_KEY}/search.php")
     suspend fun getCocktail(
         @Query("s") cocktailName: String,
-    ) : ApiCocktails
+    ): ApiCocktails
+
+    @GET("json/v1/${BuildConfig.COCKTAILDB_AUTH_KEY}/random.php")
+    suspend fun getRandomCocktail(): ApiCocktails
 }

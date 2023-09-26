@@ -14,8 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.wreckingballsoftware.fiveoclocksomewhere.Actions
 import com.wreckingballsoftware.fiveoclocksomewhere.R
-import com.wreckingballsoftware.fiveoclocksomewhere.ui.Actions
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.compose.FiveButton
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.intro.models.IntroNavigation
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.theme.customTypography
