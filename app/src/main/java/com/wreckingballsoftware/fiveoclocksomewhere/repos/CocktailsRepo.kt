@@ -3,7 +3,6 @@ package com.wreckingballsoftware.fiveoclocksomewhere.repos
 import com.wreckingballsoftware.fiveoclocksomewhere.R
 import com.wreckingballsoftware.fiveoclocksomewhere.database.CocktailsDao
 import com.wreckingballsoftware.fiveoclocksomewhere.database.DBCocktails
-import com.wreckingballsoftware.fiveoclocksomewhere.database.RegionalCocktailsDao
 import com.wreckingballsoftware.fiveoclocksomewhere.network.CocktailDBService
 import com.wreckingballsoftware.fiveoclocksomewhere.network.models.ApiCocktails
 import com.wreckingballsoftware.fiveoclocksomewhere.network.models.NetworkResponse
@@ -18,14 +17,8 @@ import retrofit2.HttpException
 class CocktailsRepo(
     private val timeZonesRepo: TimeZonesRepo,
     private val cocktailsDao: CocktailsDao,
-    private val regionalCocktailsDao: RegionalCocktailsDao,
     private val cocktailDBService: CocktailDBService,
     ) {
-    val chosenCocktailData: DBCocktails? = null
-    suspend fun getAllCocktails(): List<DBCocktails> = withContext(Dispatchers.IO) {
-        cocktailsDao.getAllCocktails()
-    }
-
     suspend fun getCocktailById(cocktailId: Long): Response<UICocktail> = withContext(Dispatchers.IO) {
         val cocktails = callCocktailApi {
             cocktailDBService.getCocktailById(cocktailId.toString())
@@ -82,20 +75,19 @@ class CocktailsRepo(
         }
 
     suspend fun getCocktailFromWhereIts5OClock(): Response<UICocktail> = withContext(Dispatchers.IO) {
-        val zoneId = timeZonesRepo.getFiveOClockTimeZoneId()
-        if (zoneId != 0) {
-            val cocktails = regionalCocktailsDao.getAllCocktailsInZone(zoneId)
-            val cocktail = chooseCocktail(cocktails)
-            getCocktailInfo(cocktail)
-        } else {
-           Response.Error(errorMessageId = R.string.water)
+        val zoneId = timeZonesRepo.getFiveOClockTimeZones()
+        zoneId.ifEmpty {
+            Response.Error<UICocktail>(errorMessageId = R.string.water)
         }
+        val cocktails = cocktailsDao.getAllCocktails()
+        val cocktail = chooseCocktail(cocktails)
+        getCocktailInfo(cocktail)
     }
 
     private suspend fun getCocktailInfo(dbCocktail: DBCocktails): Response<UICocktail> {
         return when (val cocktails = callCocktailApiForDrink(dbCocktail.searchString)) {
             is NetworkResponse.Success -> {
-                val data = cocktails.mapToUICocktail(dbCocktail.name)
+                val data = cocktails.mapToUICocktail()
                 if (data.error != null) {
                     Response.Error(errorMessageId = R.string.unknown_network_error)
                 } else {
@@ -138,7 +130,7 @@ private fun HttpException.toNetworkErrorResponse(): NetworkResponse<Nothing> =
         else -> NetworkResponse.Error.UnknownNetworkError(this, code)
     }
 
-private fun NetworkResponse<ApiCocktails>.mapToUICocktail(displayName: String? = null): UICocktail =
+private fun NetworkResponse<ApiCocktails>.mapToUICocktail(): UICocktail =
     when (this) {
         is NetworkResponse.Success -> {
             if (!data.drinks.isNullOrEmpty()) {
@@ -146,7 +138,7 @@ private fun NetworkResponse<ApiCocktails>.mapToUICocktail(displayName: String? =
                 UICocktail(
                     id = drink.id,
                     name = drink.name,
-                    displayName = displayName ?: "${determineArticle(drink.name)} ${drink.name}",
+                    displayName = "${determineArticle(drink.name)} ${drink.name}",
                     glass = drink.glass,
                     instructions = drink.instructions,
                     imageUrl = drink.imageUrl,

@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
         ForeignKey(
             entity = DBTimeZones::class,
             parentColumns = ["id"],
-            childColumns = ["zone_id"],
+            childColumns = ["time_zone"],
         )
     ]
 )
@@ -19,6 +19,6 @@ data class DBCountries(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val name: String,
-    @ColumnInfo("zone_id")
-    val zoneId: Int,
+    @ColumnInfo("time_zone")
+    val timeZoneId: Int,
 )

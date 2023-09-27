@@ -62,7 +62,6 @@ val appModule = module {
         CocktailsRepo(
             timeZonesRepo = get(),
             cocktailsDao = get(),
-            regionalCocktailsDao = get(),
             cocktailDBService = get(),
         )
     }
@@ -80,11 +79,6 @@ val appModule = module {
     single {
         val database = get<ItsFiveOClockSomewhereDb>()
         database.getCocktailsDao()
-    }
-
-    single {
-        val database = get<ItsFiveOClockSomewhereDb>()
-        database.getRegionalCocktailsDao()
     }
 
     single {

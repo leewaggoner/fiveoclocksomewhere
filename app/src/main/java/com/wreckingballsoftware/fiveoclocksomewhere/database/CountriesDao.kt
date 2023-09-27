@@ -5,6 +5,6 @@ import androidx.room.Query
 
 @Dao
 interface CountriesDao {
-    @Query("SELECT * FROM countries WHERE zone_id=:zoneId")
-    fun getAllCountriesInZone(zoneId: Int): List<DBCountries>
+    @Query("SELECT * FROM countries WHERE time_zone IN (:zones)")
+    fun getAllCountriesInZones(zones: List<Int>): List<DBCountries>
 }

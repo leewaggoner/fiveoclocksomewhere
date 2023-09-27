@@ -8,7 +8,6 @@ import androidx.room.RoomDatabase
         DBCocktails::class,
         DBTimeZones::class,
         DBCountries::class,
-        DBRegionalCocktails::class
     ],
     version = 2,
     exportSchema = false
@@ -19,6 +18,4 @@ abstract class ItsFiveOClockSomewhereDb : RoomDatabase() {
     abstract fun getTimeZonesDao(): TimeZonesDao
 
     abstract fun getCountriesDao(): CountriesDao
-
-    abstract fun getRegionalCocktailsDao(): RegionalCocktailsDao
 }

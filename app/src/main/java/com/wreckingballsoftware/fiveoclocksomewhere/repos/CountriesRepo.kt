@@ -13,13 +13,17 @@ class CountriesRepo(
     private val countriesDao: CountriesDao,
 ) {
     suspend fun getPlaceWhereIts5OClock(): Response<String> = withContext(Dispatchers.IO) {
-        val zoneId = timeZonesRepo.getFiveOClockTimeZoneId()
-        if (zoneId != 0) {
-            val places = countriesDao.getAllCountriesInZone(zoneId)
-            Response.Success(choosePlace(places))
-        } else {
-            Response.Error(errorMessageId = R.string.country_error)
+        val zones = timeZonesRepo.getFiveOClockTimeZones()
+        zones.ifEmpty {
+            Response.Error<String>(errorMessageId = R.string.country_error)
         }
+
+        val places = countriesDao.getAllCountriesInZones(zones.map { it.id })
+        places.ifEmpty {
+            Response.Error<String>(errorMessageId = R.string.country_error)
+        }
+
+        Response.Success(choosePlace(places))
     }
 
     private fun choosePlace(

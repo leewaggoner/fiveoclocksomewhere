@@ -8,7 +8,6 @@ import androidx.room.PrimaryKey
 data class DBCocktails(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val name: String,
     @ColumnInfo("search_string")
     val searchString: String,
 )
