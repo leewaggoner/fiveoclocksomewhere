@@ -5,7 +5,7 @@ import com.wreckingballsoftware.fiveoclocksomewhere.BuildConfig
 import com.wreckingballsoftware.fiveoclocksomewhere.database.ItsFiveOClockSomewhereDb
 import com.wreckingballsoftware.fiveoclocksomewhere.network.CocktailDBService
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.CocktailsRepo
-import com.wreckingballsoftware.fiveoclocksomewhere.repos.CountriesRepo
+import com.wreckingballsoftware.fiveoclocksomewhere.repos.PlacesRepo
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.TimeZonesRepo
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.displaycocktail.DisplayCocktailViewModel
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.intro.IntroViewModel
@@ -33,7 +33,7 @@ val appModule = module {
     viewModel {
         MainViewModel(
             handle = get(),
-            countriesRepo = get(),
+            placesRepo = get(),
             cocktailsRepo = get(),
         )
     }
@@ -52,23 +52,22 @@ val appModule = module {
     }
 
     single {
-        CountriesRepo(
+        PlacesRepo(
             timeZonesRepo = get(),
-            countriesDao = get(),
+            placesDao = get(),
         )
     }
 
     single {
         CocktailsRepo(
-            timeZonesRepo = get(),
-            cocktailsDao = get(),
             cocktailDBService = get(),
+            regionalCocktailsDao = get(),
         )
     }
 
     single {
         val database = get<ItsFiveOClockSomewhereDb>()
-        database.getCountriesDao()
+        database.getPlacesDao()
     }
 
     single {
@@ -78,7 +77,7 @@ val appModule = module {
 
     single {
         val database = get<ItsFiveOClockSomewhereDb>()
-        database.getCocktailsDao()
+        database.getRegionalCocktails()
     }
 
     single {

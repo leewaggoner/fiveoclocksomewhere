@@ -1,4 +1,4 @@
-package com.wreckingballsoftware.fiveoclocksomewhere.network.models
+package com.wreckingballsoftware.fiveoclocksomewhere.network
 
 sealed class NetworkResponse<out T> {
     data class Success<T>(val data: T) : NetworkResponse<T>()

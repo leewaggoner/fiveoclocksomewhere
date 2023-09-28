@@ -7,8 +7,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
 import com.wreckingballsoftware.fiveoclocksomewhere.R
+import com.wreckingballsoftware.fiveoclocksomewhere.database.DBPlaces
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.CocktailsRepo
-import com.wreckingballsoftware.fiveoclocksomewhere.repos.CountriesRepo
+import com.wreckingballsoftware.fiveoclocksomewhere.repos.PlacesRepo
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.models.Response
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.models.UICocktail
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.mainscreen.models.MainScreenNavigation
@@ -21,7 +22,7 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(
     handle: SavedStateHandle,
-    private val countriesRepo: CountriesRepo,
+    private val placesRepo: PlacesRepo,
     private val cocktailsRepo: CocktailsRepo,
 ) : ViewModel() {
     val navigation = MutableSharedFlow<MainScreenNavigation>(
@@ -36,8 +37,8 @@ class MainViewModel(
     private var currentCocktailId: Long = -1
 
     init {
-        fetchCocktailData {
-            fetchCocktail()
+        fetchCocktailData { place ->
+            fetchCocktail(place)
         }
     }
 
@@ -70,20 +71,24 @@ class MainViewModel(
         state = state.copy(cocktailErrorId = null, cocktailError = null)
     }
 
-    private fun fetchCocktailData(cocktailCall: (suspend () -> MainScreenState)) {
+    private fun fetchCocktailData(cocktailCall: (suspend (DBPlaces?) -> MainScreenState)) {
         viewModelScope.launch(Dispatchers.Main) {
             state = state.copy(isLoading = true)
-            state = when (val place = countriesRepo.getPlaceWhereIts5OClock()) {
-                is Response.Success -> state.copy(placeName = place.data ?: "")
+            val place = placesRepo.getPlaceWhereIts5OClock()
+            state = when (place) {
+                is Response.Success -> {
+                    state = state.copy(placeName = place.data?.name ?: "")
+                    cocktailCall(place.data)
+                }
                 is Response.Error -> state.copy(placeErrorId = place.messageId)
                 else -> state
             }
-            state = cocktailCall()
         }
     }
 
-    private suspend fun fetchCocktail(): MainScreenState {
-        val cocktail = cocktailsRepo.getCocktailFromWhereIts5OClock()
+    private suspend fun fetchCocktail(place: DBPlaces?): MainScreenState {
+        val cocktail = cocktailsRepo.getCocktailFromWhereIts5OClock(
+            place ?: DBPlaces(14, "", 0))
         return handleCocktailResponse(cocktail)
     }
 

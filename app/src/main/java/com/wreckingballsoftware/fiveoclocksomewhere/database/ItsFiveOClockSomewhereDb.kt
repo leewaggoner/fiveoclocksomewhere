@@ -7,15 +7,16 @@ import androidx.room.RoomDatabase
     entities = [
         DBCocktails::class,
         DBTimeZones::class,
-        DBCountries::class,
+        DBPlaces::class,
+        DBRegionalCocktails::class,
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class ItsFiveOClockSomewhereDb : RoomDatabase() {
-    abstract fun getCocktailsDao(): CocktailsDao
-
     abstract fun getTimeZonesDao(): TimeZonesDao
 
-    abstract fun getCountriesDao(): CountriesDao
+    abstract fun getPlacesDao(): PlacesDao
+
+    abstract fun getRegionalCocktails(): RegionalCocktailsDao
 }

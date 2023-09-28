@@ -6,7 +6,7 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "countries",
+    tableName = "places",
     foreignKeys = [
         ForeignKey(
             entity = DBTimeZones::class,
@@ -15,10 +15,10 @@ import androidx.room.PrimaryKey
         )
     ]
 )
-data class DBCountries(
+data class DBPlaces(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val name: String,
-    @ColumnInfo("time_zone")
+    @ColumnInfo("time_zone", index = true)
     val timeZoneId: Int,
 )
