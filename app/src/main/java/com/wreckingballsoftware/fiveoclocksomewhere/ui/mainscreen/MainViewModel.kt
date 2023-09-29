@@ -87,7 +87,7 @@ class MainViewModel(
 
     private suspend fun fetchCocktail(place: DBPlaces?): MainScreenState {
         val cocktail = cocktailsRepo.getCocktailFromWhereIts5OClock(
-            place ?: DBPlaces(id = 14, name = "", timeZoneId = 0) //default to Pepeete
+            place ?: DBPlaces(id = 14, name = "", timeZoneId = 0) //default to Papeete
         )
         return handleCocktailResponse(cocktail)
     }

@@ -6,6 +6,7 @@ import com.wreckingballsoftware.fiveoclocksomewhere.database.RegionalCocktailsDa
 import com.wreckingballsoftware.fiveoclocksomewhere.network.CocktailDBService
 import com.wreckingballsoftware.fiveoclocksomewhere.network.NetworkResponse
 import com.wreckingballsoftware.fiveoclocksomewhere.network.models.ApiCocktails
+import com.wreckingballsoftware.fiveoclocksomewhere.network.toNetworkErrorResponse
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.models.Response
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.models.UICocktail
 import com.wreckingballsoftware.fiveoclocksomewhere.utils.getArticle
@@ -22,42 +23,14 @@ class CocktailsRepo(
         val cocktails = callCocktailApi {
             cocktailDBService.getCocktailById(cocktailId.toString())
         }
-        when (cocktails) {
-            is NetworkResponse.Success -> {
-                val data = cocktails.mapToUICocktail()
-                if (data.error != null) {
-                    Response.Error(errorMessage = "Unknown server error")
-                } else {
-                    Response.Success(data = data)
-                }
-            }
-            is NetworkResponse.Error -> {
-                Response.Error(
-                    errorMessage = "Error code: ${cocktails.code} ${cocktails.exception}"
-                )
-            }
-        }
+        cocktails.toResponse()
     }
 
     suspend fun getRandomCocktail(): Response<UICocktail> = withContext(Dispatchers.IO) {
         val cocktails = callCocktailApi {
             cocktailDBService.getRandomCocktail()
         }
-        when (cocktails) {
-            is NetworkResponse.Success -> {
-                val data = cocktails.mapToUICocktail()
-                if (data.error != null) {
-                    Response.Error(errorMessage = "Unknown server error")
-                } else {
-                    Response.Success(data = data)
-                }
-            }
-            is NetworkResponse.Error -> {
-                Response.Error(
-                    errorMessage = "Error code: ${cocktails.code} ${cocktails.exception}"
-                )
-            }
-        }
+        cocktails.toResponse()
     }
 
     private suspend fun callCocktailApi(
@@ -80,21 +53,8 @@ class CocktailsRepo(
     }
 
     private suspend fun getCocktailInfo(dbCocktail: DBCocktails): Response<UICocktail> {
-        return when (val cocktails = callCocktailApiForDrink(dbCocktail.searchString)) {
-            is NetworkResponse.Success -> {
-                val data = cocktails.mapToUICocktail()
-                if (data.error != null) {
-                    Response.Error(errorMessage = "Unknown server error")
-                } else {
-                    Response.Success(data = data)
-                }
-            }
-            is NetworkResponse.Error -> {
-                Response.Error(
-                    errorMessage = "Error code: ${cocktails.code} ${cocktails.exception}"
-                )
-            }
-        }
+        val cocktail = callCocktailApiForDrink(dbCocktail.searchString)
+        return cocktail.toResponse()
     }
 
     private suspend fun callCocktailApiForDrink(cocktail: String): NetworkResponse<ApiCocktails> =
@@ -113,41 +73,30 @@ class CocktailsRepo(
     ): DBCocktails = cocktails[(0 .. cocktails.size).rand()]
 }
 
-private fun HttpException.toNetworkErrorResponse(): NetworkResponse<Nothing> =
-    when (val code = code()) {
-        400 -> NetworkResponse.Error.BadRequest(this, code)
-        401,
-        403 -> NetworkResponse.Error.Unauthorized(this, code)
-        404 -> NetworkResponse.Error.NotFound(this, code)
-        429 -> NetworkResponse.Error.TooManyRequests(this, code)
-        in 400..499 -> NetworkResponse.Error.ApiError(this, code)
-        in 500..599 -> NetworkResponse.Error.ServerError(this, code)
-        else -> NetworkResponse.Error.UnknownNetworkError(this, code)
-    }
-
-private fun NetworkResponse<ApiCocktails>.mapToUICocktail(): UICocktail =
+private fun NetworkResponse<ApiCocktails>.toResponse(): Response<UICocktail> =
     when (this) {
         is NetworkResponse.Success -> {
             if (!data.drinks.isNullOrEmpty()) {
                 val drink = data.drinks[0]
-                UICocktail(
-                    id = drink.id,
-                    name = drink.name,
-                    displayName = "${drink.name.getArticle()} ${drink.name}",
-                    glass = drink.glass,
-                    instructions = drink.instructions,
-                    imageUrl = drink.imageUrl,
-                    ingredients = drink.getIngredientList(),
-                    measures = drink.getMeasuresList(),
-                    attribution = drink.attribution,
+                Response.Success(
+                    UICocktail(
+                        id = drink.id,
+                        name = drink.name,
+                        displayName = "${drink.name.getArticle()} ${drink.name}",
+                        glass = drink.glass,
+                        instructions = drink.instructions,
+                        imageUrl = drink.imageUrl,
+                        ingredients = drink.getIngredientList(),
+                        measures = drink.getMeasuresList(),
+                        attribution = drink.attribution,
+                    )
                 )
             } else {
-                UICocktail(error = "Error!")
+                Response.Error(errorMessage = "Unknown network error.")
             }
         }
         is NetworkResponse.Error -> {
-            UICocktail(error = "Error code ${code}: ${exception.localizedMessage}")
+            Response.Error(errorMessage = "Error code ${code}: ${exception.localizedMessage}")
         }
     }
-
 
