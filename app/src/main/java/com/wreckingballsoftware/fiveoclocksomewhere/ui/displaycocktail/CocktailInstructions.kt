@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,39 +18,45 @@ import com.wreckingballsoftware.fiveoclocksomewhere.ui.theme.dimensions
 
 @Composable
 fun CocktailInstructions(
-    state: DisplayCocktailState
+    state: DisplayCocktailState,
+    modifier: Modifier = Modifier
 ) {
-    Text(
-        text = stringResource(id = R.string.ingredients),
-        style = MaterialTheme.customTypography.fiveSubtitle,
-    )
-
-    state.cocktailIngredients.forEachIndexed { index, ingredient ->
-        val measure = if (index < state.cocktailMeasures.size) {
-            state.cocktailMeasures[index]
-        } else {
-            ""
-        }
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(
-            text = "$measure $ingredient",
+            text = stringResource(id = R.string.ingredients),
+            style = MaterialTheme.customTypography.fiveSubtitle,
+        )
+
+        state.cocktailIngredients.forEachIndexed { index, ingredient ->
+            val measure = if (index < state.cocktailMeasures.size) {
+                state.cocktailMeasures[index]
+            } else {
+                ""
+            }
+            Text(
+                text = "$measure $ingredient",
+                style = MaterialTheme.customTypography.fiveInstructions
+            )
+        }
+
+        Spacer(
+            modifier = Modifier
+                .padding(top = MaterialTheme.dimensions.DisplaySmallSpace)
+        )
+
+        Text(
+            text = stringResource(id = R.string.instructions),
+            style = MaterialTheme.customTypography.fiveSubtitle,
+        )
+
+        Text(
+            text = state.cocktailInstructions,
             style = MaterialTheme.customTypography.fiveInstructions
         )
     }
-
-    Spacer(
-        modifier = Modifier
-            .padding(top = MaterialTheme.dimensions.DisplaySmallSpace)
-    )
-
-    Text(
-        text = stringResource(id = R.string.instructions),
-        style = MaterialTheme.customTypography.fiveSubtitle,
-    )
-
-    Text(
-        text = state.cocktailInstructions,
-        style = MaterialTheme.customTypography.fiveInstructions
-    )
 }
 
 @Preview("CocktailInstructionsPreview")
@@ -57,7 +64,7 @@ fun CocktailInstructions(
 fun CocktailInstructionsPreview() {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         CocktailInstructions(
             state = DisplayCocktailState(
@@ -76,5 +83,6 @@ fun CocktailInstructionsPreview() {
                         "everything together. Top up with soda water to serve and " +
                         "garnish with extra mint, if you like."
             ),
-        )    }
+        )
+    }
 }

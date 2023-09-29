@@ -7,6 +7,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.theme.White
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.theme.customColorsPalette
 
@@ -15,7 +16,7 @@ import com.wreckingballsoftware.fiveoclocksomewhere.ui.theme.customColorsPalette
 fun TopBar(
     title: String,
     modifier: Modifier = Modifier,
-    ) {
+) {
     TopAppBar(
         modifier = modifier,
         title = {
@@ -28,5 +29,13 @@ fun TopBar(
             containerColor = MaterialTheme.customColorsPalette.primary,
             titleContentColor = White,
         ),
+    )
+}
+
+@Preview("TopBar Preview")
+@Composable
+fun TopBarPreview() {
+    TopBar(
+        title = "My App"
     )
 }

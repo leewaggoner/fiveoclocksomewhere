@@ -1,6 +1,5 @@
 package com.wreckingballsoftware.fiveoclocksomewhere.repos
 
-import com.wreckingballsoftware.fiveoclocksomewhere.R
 import com.wreckingballsoftware.fiveoclocksomewhere.database.DBPlaces
 import com.wreckingballsoftware.fiveoclocksomewhere.database.PlacesDao
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.models.Response
@@ -15,12 +14,12 @@ class PlacesRepo(
     suspend fun getPlaceWhereIts5OClock(): Response<DBPlaces> = withContext(Dispatchers.IO) {
         val zones = timeZonesRepo.getFiveOClockTimeZones()
         zones.ifEmpty {
-            Response.Error<String>(errorMessageId = R.string.country_error)
+            Response.Error<String>(errorMessage = "Unknown database error")
         }
 
         val places = placesDao.getAllPlacesInZones(zones.map { it.id })
         places.ifEmpty {
-            Response.Error<String>(errorMessageId = R.string.country_error)
+            Response.Error<String>(errorMessage = "It's not five 0'clock anywhere!")
         }
 
         Response.Success(choosePlace(places))

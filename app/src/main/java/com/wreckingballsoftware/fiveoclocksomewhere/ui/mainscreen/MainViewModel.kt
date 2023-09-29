@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
-import com.wreckingballsoftware.fiveoclocksomewhere.R
 import com.wreckingballsoftware.fiveoclocksomewhere.database.DBPlaces
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.CocktailsRepo
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.PlacesRepo
@@ -68,19 +67,19 @@ class MainViewModel(
     }
 
     fun onDismissAlert() {
-        state = state.copy(cocktailErrorId = null, cocktailError = null)
+        state = state.copy(errorMessage = null)
     }
 
     private fun fetchCocktailData(cocktailCall: (suspend (DBPlaces?) -> MainScreenState)) {
         viewModelScope.launch(Dispatchers.Main) {
             state = state.copy(isLoading = true)
-            val place = placesRepo.getPlaceWhereIts5OClock()
-            state = when (place) {
+            val placeResponse = placesRepo.getPlaceWhereIts5OClock()
+            state = when (placeResponse) {
                 is Response.Success -> {
-                    state = state.copy(placeName = place.data?.name ?: "")
-                    cocktailCall(place.data)
+                    state = state.copy(placeName = placeResponse.data?.name ?: "")
+                    cocktailCall(placeResponse.data)
                 }
-                is Response.Error -> state.copy(placeErrorId = place.messageId)
+                is Response.Error -> state.copy(errorMessage = placeResponse.errorMessage)
                 else -> state
             }
         }
@@ -88,7 +87,8 @@ class MainViewModel(
 
     private suspend fun fetchCocktail(place: DBPlaces?): MainScreenState {
         val cocktail = cocktailsRepo.getCocktailFromWhereIts5OClock(
-            place ?: DBPlaces(14, "", 0))
+            place ?: DBPlaces(id = 14, name = "", timeZoneId = 0) //default to Pepeete
+        )
         return handleCocktailResponse(cocktail)
     }
 
@@ -100,7 +100,7 @@ class MainViewModel(
     private fun handleCocktailResponse(cocktail: Response<UICocktail>): MainScreenState {
         return when (cocktail) {
             is Response.Success -> {
-                val drink = cocktail.data
+                val drink: UICocktail? = cocktail.data
                 if (drink != null) {
                     currentCocktailId = drink.id ?: -1L
                     state.copy(
@@ -111,15 +111,14 @@ class MainViewModel(
                 } else {
                     state.copy(
                         isLoading = false,
-                        cocktailErrorId = R.string.unknown_network_error
+                        cocktailError = "Unknown server error."
                     )
                 }
             }
             is Response.Error -> {
                 state.copy(
                     isLoading = false,
-                    cocktailErrorId = cocktail.messageId,
-                    cocktailError = cocktail.message,
+                    cocktailError = cocktail.errorMessage,
                 )
             }
             else -> state

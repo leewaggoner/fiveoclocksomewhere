@@ -2,13 +2,11 @@ package com.wreckingballsoftware.fiveoclocksomewhere.repos.models
 
 sealed class Response<T>(
     val data: T? = null,
-    val message: String? = null,
-    val messageId: Int? = null,
+    val errorMessage: String? = null,
 ) {
     class Success<T>(data: T) : Response<T>(data = data)
     class Error<T>(
         errorMessage: String? = null,
-        errorMessageId: Int? = null,
-    ) : Response<T>(message = errorMessage, messageId = errorMessageId)
+    ) : Response<T>(errorMessage = errorMessage)
     class Loading<T>() : Response<T>()
 }

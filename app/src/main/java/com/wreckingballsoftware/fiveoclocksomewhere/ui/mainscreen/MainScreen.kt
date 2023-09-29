@@ -14,7 +14,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -68,7 +67,11 @@ fun MainScreenContent(
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        MainInfoText(state = state)
+        MainInfoText(
+            toast = state.toast,
+            placeName = state.placeName,
+            cocktailName = state.cocktailName
+        )
         Spacer(modifier = Modifier.height(MaterialTheme.dimensions.MainSpaceBig))
         FiveImage(url = state.imageUrl)
         Spacer(modifier = Modifier.height(MaterialTheme.dimensions.MainSpaceBig))
@@ -81,13 +84,9 @@ fun MainScreenContent(
             CircularProgressIndicator()
         }
 
-        if (state.cocktailErrorId != null || state.cocktailError != null) {
+        if (state.errorMessage != null) {
             FiveErrorAlert(
-                message = if (state.cocktailErrorId == null) {
-                    state.cocktailError ?: ""
-                } else {
-                    stringResource(id = state.cocktailErrorId)
-                },
+                message = state.errorMessage,
                 onDismissAlert = onDismissAlert
             )
         }

@@ -1,6 +1,5 @@
 package com.wreckingballsoftware.fiveoclocksomewhere.repos
 
-import com.wreckingballsoftware.fiveoclocksomewhere.R
 import com.wreckingballsoftware.fiveoclocksomewhere.database.DBCocktails
 import com.wreckingballsoftware.fiveoclocksomewhere.database.DBPlaces
 import com.wreckingballsoftware.fiveoclocksomewhere.database.RegionalCocktailsDao
@@ -9,7 +8,7 @@ import com.wreckingballsoftware.fiveoclocksomewhere.network.NetworkResponse
 import com.wreckingballsoftware.fiveoclocksomewhere.network.models.ApiCocktails
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.models.Response
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.models.UICocktail
-import com.wreckingballsoftware.fiveoclocksomewhere.utils.determineArticle
+import com.wreckingballsoftware.fiveoclocksomewhere.utils.getArticle
 import com.wreckingballsoftware.fiveoclocksomewhere.utils.rand
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -27,7 +26,7 @@ class CocktailsRepo(
             is NetworkResponse.Success -> {
                 val data = cocktails.mapToUICocktail()
                 if (data.error != null) {
-                    Response.Error(errorMessageId = R.string.unknown_network_error)
+                    Response.Error(errorMessage = "Unknown server error")
                 } else {
                     Response.Success(data = data)
                 }
@@ -48,7 +47,7 @@ class CocktailsRepo(
             is NetworkResponse.Success -> {
                 val data = cocktails.mapToUICocktail()
                 if (data.error != null) {
-                    Response.Error(errorMessageId = R.string.unknown_network_error)
+                    Response.Error(errorMessage = "Unknown server error")
                 } else {
                     Response.Success(data = data)
                 }
@@ -85,7 +84,7 @@ class CocktailsRepo(
             is NetworkResponse.Success -> {
                 val data = cocktails.mapToUICocktail()
                 if (data.error != null) {
-                    Response.Error(errorMessageId = R.string.unknown_network_error)
+                    Response.Error(errorMessage = "Unknown server error")
                 } else {
                     Response.Success(data = data)
                 }
@@ -134,7 +133,7 @@ private fun NetworkResponse<ApiCocktails>.mapToUICocktail(): UICocktail =
                 UICocktail(
                     id = drink.id,
                     name = drink.name,
-                    displayName = "${determineArticle(drink.name)} ${drink.name}",
+                    displayName = "${drink.name.getArticle()} ${drink.name}",
                     glass = drink.glass,
                     instructions = drink.instructions,
                     imageUrl = drink.imageUrl,

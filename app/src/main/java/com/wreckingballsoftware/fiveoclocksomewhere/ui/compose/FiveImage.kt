@@ -16,10 +16,15 @@ import com.wreckingballsoftware.fiveoclocksomewhere.R
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.theme.dimensions
 
 @Composable
-fun FiveImage(url: String) {
+fun FiveImage(
+    url: String,
+    modifier: Modifier = Modifier,
+) {
     SubcomposeAsyncImage(
-        modifier = Modifier
-            .size(MaterialTheme.dimensions.MainImageSize),
+        modifier = modifier.then(
+            Modifier
+                .size(MaterialTheme.dimensions.MainImageSize)
+        ),
         model = ImageRequest.Builder(LocalContext.current)
             .data(url)
             .crossfade(true)

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -15,17 +16,23 @@ import com.wreckingballsoftware.fiveoclocksomewhere.ui.theme.dimensions
 fun MainButtons(
     getRecipe: () -> Unit,
     somethingElse: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    FiveButton(
-        modifier = Modifier
-            .padding(bottom = MaterialTheme.dimensions.MainSmallSpace),
-        text = stringResource(id = R.string.get_recipe),
-        onClick = { getRecipe() }
-    )
-    FiveButton(
-        text = stringResource(id = R.string.something_else),
-        onClick = { somethingElse() }
-    )
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        FiveButton(
+            modifier = Modifier
+                .padding(bottom = MaterialTheme.dimensions.MainSmallSpace),
+            text = stringResource(id = R.string.get_recipe),
+            onClick = { getRecipe() }
+        )
+        FiveButton(
+            text = stringResource(id = R.string.another_drink),
+            onClick = { somethingElse() }
+        )
+    }
 }
 
 @Preview(name = "MainButtons preview")

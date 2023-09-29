@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.SavedStateHandleSaveableApi
 import androidx.lifecycle.viewmodel.compose.saveable
-import com.wreckingballsoftware.fiveoclocksomewhere.R
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.CocktailsRepo
 import com.wreckingballsoftware.fiveoclocksomewhere.repos.models.Response
 import com.wreckingballsoftware.fiveoclocksomewhere.ui.displaycocktail.models.DisplayCocktailState
@@ -30,14 +29,14 @@ class DisplayCocktailViewModel(
     }
 
     fun onDismissAlert() {
-        state = state.copy(cocktailErrorId = null, cocktailError = null)
+        state = state.copy(errorMessage = null)
     }
 
 
     private suspend fun getCocktail(cocktailId: Long): DisplayCocktailState {
-        return when (val cocktail = cocktailsRepo.getCocktailById(cocktailId)) {
+        return when (val cocktailResponse = cocktailsRepo.getCocktailById(cocktailId)) {
             is Response.Success -> {
-                val drink = cocktail.data
+                val drink = cocktailResponse.data
                 if (drink != null) {
                     state.copy(
                         isLoading = false,
@@ -50,15 +49,14 @@ class DisplayCocktailViewModel(
                 } else {
                     state.copy(
                         isLoading = false,
-                        cocktailErrorId = R.string.unknown_network_error
+                        errorMessage = "Unknown server error."
                     )
                 }
             }
             is Response.Error -> {
                 state.copy(
                     isLoading = false,
-                    cocktailErrorId = cocktail.messageId,
-                    cocktailError = cocktail.message,
+                    errorMessage = cocktailResponse.errorMessage,
                 )
             }
             else -> state
