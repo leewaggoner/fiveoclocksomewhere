@@ -1,5 +1,9 @@
 package com.wreckingballsoftware.fiveoclocksomewhere.ui.displaycocktail.models
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class DisplayCocktailState(
     val isLoading: Boolean = false,
     val cocktailName: String = "",
@@ -8,4 +12,4 @@ data class DisplayCocktailState(
     val cocktailIngredients: List<String> = listOf(),
     val cocktailMeasures: List<String> = listOf(),
     val cocktailInstructions: String = "",
-)
+) : Parcelable
