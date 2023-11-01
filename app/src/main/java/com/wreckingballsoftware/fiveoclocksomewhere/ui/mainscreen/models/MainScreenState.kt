@@ -1,5 +1,9 @@
 package com.wreckingballsoftware.fiveoclocksomewhere.ui.mainscreen.models
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class MainScreenState(
     val toast: String = "",
     val placeName: String = "",
@@ -8,4 +12,4 @@ data class MainScreenState(
     val cocktailError: String? = null,
     val imageUrl: String = "",
     val isLoading: Boolean = false,
-)
+) : Parcelable
