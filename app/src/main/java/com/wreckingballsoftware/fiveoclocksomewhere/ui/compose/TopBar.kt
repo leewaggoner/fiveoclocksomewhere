@@ -25,7 +25,7 @@ fun TopBar(
                 style = MaterialTheme.typography.titleMedium,
             )
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.customColorsPalette.primary,
             titleContentColor = White,
         ),
